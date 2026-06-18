@@ -4,6 +4,7 @@ from app.services.user.create_user_service import create_user_service
 from app.services.user.get_user_by_email_service import get_user_by_email_service
 from app.services.user.get_user_by_id_number_service import get_user_by_id_number_service
 from app.services.user.get_user_by_identifier_service import get_user_by_identifier_service
+from app.services.user.get_user_by_remote_identifier_service import get_user_by_remote_identifier_service
 from app.services.user.get_user_by_username_service import get_user_by_username_service
 from app.services.user.get_users_service import get_users_service
 from app.services.user.update_user_service import update_user_service
@@ -29,6 +30,13 @@ class UserFactory:
         return get_user_by_identifier_service(
             user_repository=UserFactory.get_repository(session),
             identifier=identifier
+        )
+    
+    @staticmethod
+    def get_user_by_remote_identifier(session, remote_identifier: UUID):
+        return get_user_by_remote_identifier_service(
+            user_repository=UserFactory.get_repository(session),
+            remote_identifier=remote_identifier
         )
     
     @staticmethod

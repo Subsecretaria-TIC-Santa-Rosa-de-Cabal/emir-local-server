@@ -12,6 +12,7 @@ class User(Base):
             enabled: bool,
             registration_date: datetime,
             last_update: datetime,
+            remote_identifier: UUID,
             name: str,
             username: str,
             id_number: Optional[str] = None,
@@ -24,12 +25,17 @@ class User(Base):
             registration_date,
             last_update,
         )
+        self.__remote_identifier = remote_identifier
         self.__name = name
         self.__username = username
         self.__id_number = id_number
         self.__phone_number = phone_number
         self.__email = email
 
+    @property
+    def remote_identifier(self) -> UUID:
+        return self.__remote_identifier
+    
     @property
     def name(self) -> str:
         return self.__name

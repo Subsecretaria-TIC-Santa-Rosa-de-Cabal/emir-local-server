@@ -34,6 +34,11 @@ class UserModel(Base):
         onupdate=datetime.now,
         nullable=False
     )
+    remote_id = Column(
+        UUID(as_uuid=True),
+        unique=True,
+        nullable=False
+    )
     name = Column(String, nullable=False)
     username = Column(String, nullable=False, unique=True)
     id_number = Column(String, unique=True)

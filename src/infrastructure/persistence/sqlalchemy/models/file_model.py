@@ -34,6 +34,11 @@ class FileModel(Base):
         onupdate=datetime.now,
         nullable=False
     )
+    remote_id = Column(
+        UUID(as_uuid=True),
+        nullable=False,
+        unique=True
+    )
     name = Column(String, nullable=False)
     extension = Column(String, nullable=False)
     route = Column(String, nullable=False)

@@ -25,6 +25,7 @@ class UserGetFilterDTO:
 
 @dataclass
 class UserCreateDTO:
+    remote_identifier: UUID
     name: str
     username: str
     id_number: Optional[str] = None
@@ -33,6 +34,7 @@ class UserCreateDTO:
 
 @dataclass
 class UserUpdateDTO(ToDictMixin):
+    remote_identifier: Optional[UUID] = field(default=ToDictMixin._NOT_SENT)
     blocked: Optional[bool] = field(default=ToDictMixin._NOT_SENT)
     name: Optional[str] = field(default=ToDictMixin._NOT_SENT)
     username: Optional[str] = field(default=ToDictMixin._NOT_SENT)

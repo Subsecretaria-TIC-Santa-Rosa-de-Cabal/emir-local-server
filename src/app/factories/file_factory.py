@@ -3,6 +3,7 @@ from uuid import UUID
 from app.services.file.create_file_service import create_file_service
 from app.services.file.delete_file_service import delete_file_service
 from app.services.file.get_file_by_identifier_service import get_file_by_identifier_service
+from app.services.file.get_file_by_remote_identifier_service import get_file_by_remote_identifier_service
 from app.services.file.get_files_service import get_files_service
 from app.services.file.update_file_service import update_file_service
 from domain.repositories.dto.file_dto import FileCreateDTO, FileGetFilterDTO, FileUpdateDTO
@@ -27,6 +28,13 @@ class FileFactory:
         return get_file_by_identifier_service(
             file_repository=FileFactory.get_repository(session),
             identifier=identifier
+        )
+    
+    @staticmethod
+    def get_file_by_remote_identifier(session, remote_identifier: UUID):
+        return get_file_by_remote_identifier_service(
+            file_repository=FileFactory.get_repository(session),
+            remote_identifier=remote_identifier
         )
 
     @staticmethod

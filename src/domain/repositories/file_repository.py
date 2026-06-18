@@ -16,6 +16,10 @@ class FileRepository(ABC):
         pass
 
     @abstractmethod
+    def get_by_remote_identifier(self, remote_identifier: UUID) -> Optional[File]:
+        pass
+
+    @abstractmethod
     def create(self, data: FileCreateDTO) -> Optional[File]:
         pass
 

@@ -68,9 +68,19 @@ class SQLAlchemyFileRepository(FileRepository):
         if file_model:
             return FileMapper.to_domain(file_model)
         return None
+    
+    def get_by_remote_identifier(self, remote_identifier: UUID) -> Optional[File]:
+        file_model = self.session.query(FileModel).filter_by(
+            remote_id=remote_identifier,
+            enabled=True
+        ).first()
+        if file_model:
+            return FileMapper.to_domain(file_model)
+        return None
 
     def create(self, data: FileCreateDTO) -> Optional[File]:
         new_file = FileModel(
+            remote_id=data.remote_identifier,
             name=data.name,
             extension=data.extension,
             route=data.route,
@@ -98,6 +108,10 @@ class SQLAlchemyFileRepository(FileRepository):
         if 'created_by_identifier' in payload:
             payload['created_by_id'] = payload['created_by_identifier']
             del payload['created_by_identifier']
+
+        if 'remote_identifier' in payload:
+            payload['remote_id'] = payload['remote_identifier']
+            del payload['remote_identifier']
 
         self.session.query(FileModel).filter(
             FileModel.id == identifier

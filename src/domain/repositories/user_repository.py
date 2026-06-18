@@ -16,6 +16,10 @@ class UserRepository(ABC):
         pass
 
     @abstractmethod
+    def get_by_remote_identifier(self, remote_identifier: UUID) -> Optional[User]:
+        pass
+
+    @abstractmethod
     def get_by_username(self, username: str) -> Optional[User]:
         pass
 

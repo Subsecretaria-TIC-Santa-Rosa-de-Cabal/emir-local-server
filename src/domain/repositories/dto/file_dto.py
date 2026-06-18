@@ -25,6 +25,7 @@ class FileGetFilterDTO:
 
 @dataclass
 class FileCreateDTO:
+    remote_identifier: UUID
     name: str
     extension: str
     route: str
@@ -37,6 +38,7 @@ class FileCreateDTO:
 @dataclass
 class FileUpdateDTO(ToDictMixin):
     identifier: UUID
+    remote_identifier: Optional[UUID] = field(default=ToDictMixin._NOT_SENT)
     name: Optional[str] = field(default=ToDictMixin._NOT_SENT)
     extension: Optional[str] = field(default=ToDictMixin._NOT_SENT)
     route: Optional[str] = field(default=ToDictMixin._NOT_SENT)

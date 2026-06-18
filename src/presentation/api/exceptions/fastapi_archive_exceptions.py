@@ -16,3 +16,7 @@ class FileInvalidChecksum(AppError):
 class BaseFolderUnavailable(AppError):
     def __init__(self):
         super().__init__(2003, "The base folder is unavailable", 400)
+
+class FileNotExist(AppError):
+    def __init__(self):
+        super().__init__(2004, "The file does not exist.", 404)

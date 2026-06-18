@@ -18,6 +18,7 @@ class File(Base):
             enabled: bool,
             registration_date: datetime,
             last_update: datetime,
+            remote_identifier: UUID,
             name: str,
             extension: str,
             route: str,
@@ -33,6 +34,7 @@ class File(Base):
             registration_date,
             last_update,
         )
+        self.__remote_identifier = remote_identifier
         self.__name = name
         self.__extension = extension
         self.__route = route
@@ -42,6 +44,10 @@ class File(Base):
         self.__created_by_identifier = created_by_identifier
         self.__observation = observation
 
+    @property
+    def remote_identifier(self) -> UUID:
+        return self.__remote_identifier
+    
     @property
     def name(self) -> str:
         return self.__name

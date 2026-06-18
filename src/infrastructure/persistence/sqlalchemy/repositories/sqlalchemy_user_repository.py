@@ -74,6 +74,15 @@ class SQLAlchemyUserRepository(UserRepository):
             return UserMapper.to_domain(user_model)
         return None
     
+    def get_by_remote_identifier(self, remote_identifier: UUID) -> Optional[User]:
+        user_model = self.session.query(UserModel).filter_by(
+            remote_id=remote_identifier,
+            enabled=True
+        ).first()
+        if user_model:
+            return UserMapper.to_domain(user_model)
+        return None
+    
     def get_by_username(self, username: str) -> Optional[User]:
         user_model = self.session.query(UserModel).filter_by(
             username=username,
@@ -103,6 +112,7 @@ class SQLAlchemyUserRepository(UserRepository):
     
     def create(self, data: UserCreateDTO) -> Optional[User]:
         new_user = UserModel(
+            remote_id=data.remote_identifier,
             name=data.name,
             username=data.username,
             id_number=data.id_number,
@@ -119,6 +129,10 @@ class SQLAlchemyUserRepository(UserRepository):
         data: UserUpdateDTO
     ) -> Optional[User]:
         payload = data.to_dict()
+
+        if 'remote_identifier' in payload:
+            payload['remote_id'] = 'remote_identifier'
+            del payload['remote_identifier']
 
         self.session.query(UserModel).filter(
             UserModel.id == identifier
