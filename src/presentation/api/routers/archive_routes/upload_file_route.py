@@ -8,7 +8,7 @@ from app.factories.storage_factory import StorageFactory
 from domain.entities.file import FileHashVersion
 from domain.repositories.dto.file_dto import FileCreateDTO
 from presentation.api.deps import get_db
-from presentation.api.middlewares.auth_middleware import verify_jwt
+from presentation.api.middlewares.auth_middleware import authorize_route, verify_jwt
 from presentation.api.exceptions.fastapi_archive_exceptions import BaseFolderUnavailable, FileExtensionNotAllowed, FileInvalidChecksum, FileInvalidSize
 from presentation.api.schemas.file_schema import FileResponse
 
@@ -23,6 +23,8 @@ async def upload_file(
 ):
     if not StorageFactory.is_base_folder_available():
         raise BaseFolderUnavailable()
+    
+    authorize_route(auth.role_codes, ['SUPER_ADMIN', 'ARCHIVE_BASE'])
 
     remote_identifier = uuid.UUID(auth.body['file']['remote_identifier'])
     current_file = FileFactory.get_file_by_remote_identifier(
