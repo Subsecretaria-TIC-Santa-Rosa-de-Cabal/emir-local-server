@@ -17,7 +17,7 @@ from presentation.api.exceptions.fastapi_authentication_exceptions import Access
 
 
 load_dotenv()
-PUBLIC_KEY = base64.b64decode(os.getenv("EMIR_PUBLIC_KEY_BSE64"))
+PUBLIC_KEY = base64.b64decode(os.getenv("EMIR_PUBLIC_KEY_BASE64"))
 JWT_ISS = os.getenv("JWT_ISS")
 JWT_AUD = os.getenv("JWT_AUD")
 
