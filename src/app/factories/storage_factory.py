@@ -1,10 +1,11 @@
 from typing import BinaryIO
 
+from app.services.storage.compute_file_hash_service import compute_file_hash_service
 from app.services.storage.delete_file_service import delete_file_service
 from app.services.storage.get_file_path_service import get_file_path_service
 from app.services.storage.is_base_folder_available_service import is_base_folder_available_service
 from app.services.storage.save_file_service import save_file_service
-from domain.entities.file import File
+from domain.entities.file import File, FileHashVersion
 from infrastructure.storage.local.repositories.local_storage_repository import LocalStorageRepository
 
 
@@ -15,9 +16,10 @@ class StorageFactory:
         return repository
     
     @staticmethod
-    def is_base_folder_available():
+    def is_base_folder_available(folder_path: str):
         return is_base_folder_available_service(
-            storage_repository=StorageFactory.get_repository()
+            storage_repository=StorageFactory.get_repository(),
+            folder_path=folder_path
         )
         
     @staticmethod
@@ -46,5 +48,16 @@ class StorageFactory:
             name=name,
             extension=extension,
             path=path,
+            file_body=file_body
+        )
+    
+    @staticmethod
+    def compute_file_hash(
+        hash_version: FileHashVersion,
+        file_body: BinaryIO
+    ):
+        return compute_file_hash_service(
+            storage_repository=StorageFactory.get_repository(),
+            hash_version=hash_version,
             file_body=file_body
         )

@@ -1,14 +1,15 @@
 from abc import ABC, abstractmethod
 from typing import BinaryIO
 
-from domain.entities.file import File
+from domain.entities.file import File, FileHashVersion
 from domain.repositories.dto.storage_dto import SaveFileResponseDTO
 
 
 class StorageRepository(ABC):
     @abstractmethod
     def is_base_folder_available(
-        self
+        self,
+        folder_path: str
     ) -> bool:
         pass
     
@@ -34,4 +35,12 @@ class StorageRepository(ABC):
         self,
         file: File
     ) -> None:
+        pass
+
+    @abstractmethod
+    def compute_file_hash(
+        self,
+        hash_version: FileHashVersion,
+        file_body: BinaryIO
+    ) -> str:
         pass

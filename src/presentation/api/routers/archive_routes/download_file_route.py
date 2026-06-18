@@ -1,3 +1,4 @@
+import os
 import uuid
 
 from fastapi import APIRouter, Depends
@@ -17,7 +18,8 @@ async def download_file(
     session = Depends(get_db),
     auth = Depends(verify_jwt)
 ):
-    if not StorageFactory.is_base_folder_available():
+    ARCHIVE_MAIN_FOLDER = os.getenv('ARCHIVE_MAIN_FOLDER')
+    if not StorageFactory.is_base_folder_available(ARCHIVE_MAIN_FOLDER):
         raise BaseFolderUnavailable()
     
     authorize_route(auth.role_codes, ['SUPER_ADMIN', 'ARCHIVE_BASE'])

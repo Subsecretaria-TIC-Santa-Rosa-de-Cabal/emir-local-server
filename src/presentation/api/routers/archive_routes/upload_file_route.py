@@ -1,4 +1,5 @@
 import hashlib
+import os
 import uuid
 
 from fastapi import APIRouter, Depends, File, UploadFile
@@ -21,7 +22,8 @@ async def upload_file(
     auth = Depends(verify_jwt),
     file: UploadFile = File(...)
 ):
-    if not StorageFactory.is_base_folder_available():
+    ARCHIVE_MAIN_FOLDER = os.getenv('ARCHIVE_MAIN_FOLDER')
+    if not StorageFactory.is_base_folder_available(ARCHIVE_MAIN_FOLDER):
         raise BaseFolderUnavailable()
     
     authorize_route(auth.role_codes, ['SUPER_ADMIN', 'ARCHIVE_BASE'])
@@ -40,17 +42,21 @@ async def upload_file(
     
     content = await file.read()
     
-    checksum = hashlib.sha256(content).hexdigest()
-    if auth.body['file']['checksum'] != checksum:
+    file_hash = StorageFactory.compute_file_hash(
+        hash_version=FileHashVersion(auth.body['file']['hash_version']),
+        file_body=content
+    )
+    if auth.body['file']['hash'] != file_hash:
         raise FileInvalidChecksum()
     
     if len(content) != auth.body['file']['size']:
         raise FileInvalidSize()
     
+    full_path = os.path.join(ARCHIVE_MAIN_FOLDER, auth.body['file']['remote_route'])
     file_response = StorageFactory.save_file(
         name=auth.body['file']['name'],
         extension=auth.body['file']['extension'],
-        path='apps/archive',
+        path=full_path,
         file_body=content
     )
 
@@ -62,8 +68,8 @@ async def upload_file(
             extension=auth.body['file']['extension'],
             route=file_response.absolute_path,
             size=auth.body['file']['size'],
-            hash=auth.body['file']['checksum'],
-            hash_version=FileHashVersion.SHA256,
+            hash=auth.body['file']['hash'],
+            hash_version=FileHashVersion(auth.body['file']['hash_version']),
             created_by_identifier=auth.user.identifier,
             observation=auth.body['file']['observation'],
         )

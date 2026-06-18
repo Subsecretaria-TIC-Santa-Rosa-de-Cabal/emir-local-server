@@ -19,7 +19,7 @@ APP_MODE = os.getenv("APP_MODE", "dev")
 app = FastAPI(
     title="EMIR LOCAL API",
     description="EMIR LOCAL API",
-    version="0.1.1",
+    version="0.1.3",
     deprecated=False,
     docs_url=None if APP_MODE == "production" else "/docs",
     redoc_url=None if APP_MODE == "production" else "/redoc",
