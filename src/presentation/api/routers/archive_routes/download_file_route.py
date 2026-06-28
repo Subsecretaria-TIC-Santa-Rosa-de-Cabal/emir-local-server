@@ -7,6 +7,7 @@ from fastapi.responses import FileResponse as FastapiFileResponse
 from app.factories.file_factory import FileFactory
 from app.factories.storage_factory import StorageFactory
 from presentation.api.deps import get_db
+from presentation.api.exceptions.fastapi_authentication_exceptions import InvalidAction
 from presentation.api.middlewares.auth_middleware import authorize_route, verify_jwt
 from presentation.api.exceptions.fastapi_archive_exceptions import BaseFolderUnavailable, FileNotExist
 
@@ -23,6 +24,9 @@ async def download_file(
         raise BaseFolderUnavailable()
     
     authorize_route(auth.role_codes, ['SUPER_ADMIN', 'ARCHIVE_BASE'])
+
+    if auth.action != 'DOWNLOAD_OBJECT':
+        raise InvalidAction()
 
     remote_identifier = uuid.UUID(auth.body['file']['remote_identifier'])
     current_file = FileFactory.get_file_by_remote_identifier(

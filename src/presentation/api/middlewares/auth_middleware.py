@@ -24,6 +24,7 @@ JWT_AUD = os.getenv("JWT_AUD")
 @dataclass
 class AuthResponse:
     user: User
+    action: str
     role_codes: list[str]
     body: Optional[dict]
 
@@ -64,6 +65,7 @@ async def verify_jwt(
             )
         auth_response = AuthResponse(
             user=auth_user,
+            action=payload['action'],
             role_codes=payload['role_codes'],
             body=payload['body']
         )

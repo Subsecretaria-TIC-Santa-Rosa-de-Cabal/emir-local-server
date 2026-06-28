@@ -13,3 +13,7 @@ class AccessDenied(AppError):
     def __init__(self):
         super().__init__(1002, "Access denied", 403)
 
+class InvalidAction(AppError):
+    def __init__(self):
+        super().__init__(1003, "Invalid action", 403)
+
