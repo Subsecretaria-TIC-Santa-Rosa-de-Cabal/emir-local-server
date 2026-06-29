@@ -1,3 +1,4 @@
+import base64
 import hashlib
 import os
 import shutil
@@ -66,6 +67,8 @@ class LocalStorageRepository(StorageRepository):
         file_body: BinaryIO
     ) -> str:
         if hash_version == FileHashVersion.SHA256:
-            return hashlib.sha256(file_body).hexdigest()
+            hasher = hashlib.sha256(file_body)
         elif hash_version == FileHashVersion.SHA3_512:
-            return hashlib.sha3_512(file_body).hexdigest()
+            hasher = hashlib.sha3_512(file_body)
+        digest = hasher.digest()
+        return base64.b64encode(digest).decode("ascii")

@@ -7,7 +7,7 @@ pip install -r requirements.txt
 
 ### Start the api in development mode
 ```bash
-fastapi dev src/presentation/api/main.py
+fastapi dev src/presentation/api/main.py --port 8001
 ```
 
 ### Build docker image
