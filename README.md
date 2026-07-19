@@ -1,4 +1,4 @@
-# EMIR CORE Backend
+# EMIR Local Server
 
 ## Install the dependencies
 ```bash
